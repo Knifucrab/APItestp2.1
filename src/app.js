@@ -1,7 +1,7 @@
 import express from "express";
 import morgan from "morgan";
 //Routes
-import userRoutes from "./routes/users.routes";
+import personaRoutes from "./routes/personas.routes";
 
 const app = express();
 
@@ -13,6 +13,6 @@ app.use(morgan("dev")); //morgan imprime en pantalla erorres de node
 app.use(express.json()); //para que la app pueda entender y procesar json
 
 //Routes
-app.use("/api/users", userRoutes);
+app.use("/api/personas", personaRoutes);
 
 export default app;
