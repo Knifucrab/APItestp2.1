@@ -1,62 +1,35 @@
-import { getConnection } from "../database/database";
+const personaService = require("../services/personaService");
 
 //Funcion get todos las personas y mostrar por pantalla
 const getPersonas = async (req, res) => {
   try {
-    const connection = await getConnection();
-    const result = await connection.query(
-      "SELECT nombre,dni,birth_date FROM persona"
-    );
-    console.log(result);
-    res.json({ result });
+    const personas = await personaService.getPersonas();
+    res.json(personas);
   } catch (error) {
-    res.status(500);
-    res.send(error.message);
+    console.error("Error al obtener usuarios:", error);
+    res.status(500).send("Error al obtener usuarios");
   }
 };
 
 //Funcion añadir persona
 const addPersona = async (req, res) => {
+  //desestructuramos el post de postman y asi guardamos los valores que llegan
+  const { nombre, dni, birth_date } = req.body;
+
   try {
-    //desestructuramos el post de postman y asi guardamos los valores que llegan
-    const { nombre, dni, birth_date } = req.body;
-
-    // si vienen vacios algunos de los datos necesarios salta este error
-    if (nombre === undefined || dni === undefined || birth_date === undefined) {
-      res
-        .status(400)
-        .json({ messbirth_date: "Bad Request. Please fill all field." });
-    }
-
-    // guardamos en un objeto Persona los valores que envia el usuario en el POST
-    const Persona = {
-      nombre,
-      dni,
-      birth_date,
-    };
-
-    //establecemos conexion con la base de datos
-    const connection = await getConnection();
-
-    //enviamos peticion a la base de datos para setear el usuario
-    const result = await connection.query("INSERT INTO persona SET ?", Persona);
+    await personaService.addPersona(nombre, dni, birth_date);
     res.json({ message: "Persona added" });
   } catch (error) {
     res.status(500);
-    res.send(error.message);
+    res.send("Fallo al añadir persona");
   }
 };
 
 const getPersona = async (req, res) => {
   try {
-    console.log(req.params);
     const { id } = req.params;
-    const connection = await getConnection();
-    const result = await connection.query(
-      "SELECT nombre,dni,birth_date FROM persona WHERE id = ?",
-      id
-    );
-    res.json(result);
+    const persona = await personaService.getPersona(id);
+    res.json(persona);
   } catch (error) {
     res.status(500);
     res.send(error.message);

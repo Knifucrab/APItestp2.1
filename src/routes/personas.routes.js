@@ -5,19 +5,11 @@ const router = Router();
 
 router.get(
   "/",
-  usuarioController.verificarToken,
+
   personaController.getPersonas
 );
-router.post(
-  "/",
-  usuarioController.verificarToken,
-  personaController.addPersona
-);
-router.get(
-  "/:id",
-  usuarioController.verificarToken,
-  personaController.getPersona
-);
+router.post("/", personaController.addPersona);
+router.get("/:id", personaController.getPersona);
 router.delete(
   "/:id",
   usuarioController.verificarToken,
@@ -28,7 +20,5 @@ router.put(
   usuarioController.verificarToken,
   personaController.updatePersona
 );
-router.post("/login", usuarioController.login);
-router.post("/registro", usuarioController.registro);
 
 export default router;

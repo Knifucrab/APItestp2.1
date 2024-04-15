@@ -1,4 +1,4 @@
-import { getConnection } from "../database/database";
+const db = require("../dataAccess/database");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
@@ -10,7 +10,7 @@ const login = async (req, res) => {
   try {
     // Buscar el usuario en la base de datos por nombre de usuario
     const connection = await getConnection();
-    const [usuario] = await connection.query(
+    const [usuario] = await db.query(
       "SELECT * FROM usuarios WHERE nombreUsuario = ?",
       [nombreUsuario]
     );
